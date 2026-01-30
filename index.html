@@ -312,6 +312,175 @@
             margin-bottom: 1rem;
         }
 
+        /* Search Box */
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        /* Ingredient Section */
+        .ingredient-section {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #ecf0f1;
+        }
+
+        .ingredient-section h3 {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .ingredient-list {
+            margin-bottom: 1rem;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .ingredient-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            background-color: #f9f9f9;
+        }
+
+        .ingredient-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .ingredient-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ingredient-main {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .ingredient-details {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .ingredient-delete-btn {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.25rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+        }
+
+        .ingredient-delete-btn:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .ingredient-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ingredient-form input,
+        .ingredient-form select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .ingredient-form input:focus,
+        .ingredient-form select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .ingredient-notes {
+            grid-column: 1 / -1;
+        }
+
+        .ingredient-add-btn {
+            padding: 0.5rem 1rem;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .ingredient-add-btn:hover {
+            background-color: #229954;
+        }
+
+        .ingredient-add-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .empty-ingredient-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border: 1px dashed #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .btn-edit {
+            background-color: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-edit:hover {
+            background-color: #2980b9;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             main {
@@ -331,6 +500,14 @@
 
             .modal-content {
                 margin: 1rem;
+            }
+
+            .ingredient-form {
+                grid-template-columns: 1fr;
+            }
+
+            .ingredient-notes {
+                grid-column: 1;
             }
         }
     </style>
@@ -354,6 +531,9 @@
                 <div class="recipe-header">
                     <h2>My Recipes</h2>
                     <button class="btn btn-primary" id="add-recipe-btn">Add Recipe</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="recipe-search" placeholder="Search recipes...">
                 </div>
                 <div id="recipe-list" class="recipe-list"></div>
             </div>
@@ -388,7 +568,7 @@
     <div id="recipe-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add Recipe</h2>
+                <h2 id="modal-title">Add Recipe</h2>
                 <button class="close-btn" id="close-modal-btn">&times;</button>
             </div>
             <form id="recipe-form">
@@ -400,6 +580,42 @@
                     <label for="recipe-servings">Servings *</label>
                     <input type="number" id="recipe-servings" min="1" value="1" required>
                 </div>
+
+                <!-- Ingredient Section -->
+                <div class="ingredient-section">
+                    <h3>Ingredients</h3>
+                    <div id="ingredient-list" class="ingredient-list"></div>
+
+                    <div class="ingredient-form">
+                        <input type="text" id="ingredient-name" placeholder="Ingredient name">
+                        <input type="number" id="ingredient-quantity" placeholder="Qty" step="0.01" min="0">
+                        <select id="ingredient-unit">
+                            <option value="ml">ml</option>
+                            <option value="l">l</option>
+                            <option value="tsp">tsp</option>
+                            <option value="tbsp">tbsp</option>
+                            <option value="cup">cup</option>
+                            <option value="g">g</option>
+                            <option value="kg">kg</option>
+                            <option value="oz">oz</option>
+                            <option value="lb">lb</option>
+                            <option value="piece" selected>piece</option>
+                            <option value="slice">slice</option>
+                            <option value="bunch">bunch</option>
+                            <option value="can">can</option>
+                            <option value="jar">jar</option>
+                            <option value="bag">bag</option>
+                            <option value="box">box</option>
+                            <option value="pinch">pinch</option>
+                            <option value="to taste">to taste</option>
+                            <option value="clove">clove</option>
+                            <option value="sprig">sprig</option>
+                        </select>
+                        <input type="text" id="ingredient-notes" class="ingredient-notes" placeholder="Notes (optional)">
+                    </div>
+                    <button type="button" class="ingredient-add-btn" id="add-ingredient-btn">Add Ingredient</button>
+                </div>
+
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Recipe</button>
@@ -481,7 +697,7 @@
                     id: crypto.randomUUID(),
                     name: recipeData.name,
                     servings: parseInt(recipeData.servings) || 1,
-                    ingredients: [],
+                    ingredients: recipeData.ingredients || [],
                     tags: [],
                     prepTime: null,
                     notes: "",
@@ -492,6 +708,20 @@
                 this.data.recipes.push(recipe);
                 this.autoSave();
                 return recipe;
+            },
+
+            // Update an existing recipe
+            updateRecipe(id, recipeData) {
+                const recipe = this.getRecipeById(id);
+                if (recipe) {
+                    recipe.name = recipeData.name;
+                    recipe.servings = parseInt(recipeData.servings) || 1;
+                    recipe.ingredients = recipeData.ingredients || [];
+                    recipe.updatedAt = Date.now();
+                    this.autoSave();
+                    return recipe;
+                }
+                return null;
             },
 
             // Delete a recipe
@@ -505,6 +735,17 @@
                 return false;
             },
 
+            // Search recipes by name
+            searchRecipes(query) {
+                if (!query || query.trim() === '') {
+                    return this.getAllRecipes();
+                }
+                const searchTerm = query.toLowerCase().trim();
+                return this.data.recipes.filter(recipe =>
+                    recipe.name.toLowerCase().includes(searchTerm)
+                );
+            },
+
             // Auto-save to localStorage
             autoSave() {
                 Storage.save(this.data);
@@ -516,6 +757,8 @@
         // ============================================
         const UI = {
             elements: {},
+            currentEditingRecipeId: null,
+            currentIngredients: [],
 
             // Initialize UI elements and event listeners
             init() {
@@ -524,13 +767,21 @@
                     tabButtons: document.querySelectorAll('.tab-btn'),
                     tabContents: document.querySelectorAll('.tab-content'),
                     recipeList: document.getElementById('recipe-list'),
+                    recipeSearch: document.getElementById('recipe-search'),
                     addRecipeBtn: document.getElementById('add-recipe-btn'),
                     recipeModal: document.getElementById('recipe-modal'),
+                    modalTitle: document.getElementById('modal-title'),
                     recipeForm: document.getElementById('recipe-form'),
                     closeModalBtn: document.getElementById('close-modal-btn'),
                     cancelBtn: document.getElementById('cancel-btn'),
                     recipeNameInput: document.getElementById('recipe-name'),
-                    recipeServingsInput: document.getElementById('recipe-servings')
+                    recipeServingsInput: document.getElementById('recipe-servings'),
+                    ingredientList: document.getElementById('ingredient-list'),
+                    ingredientNameInput: document.getElementById('ingredient-name'),
+                    ingredientQuantityInput: document.getElementById('ingredient-quantity'),
+                    ingredientUnitSelect: document.getElementById('ingredient-unit'),
+                    ingredientNotesInput: document.getElementById('ingredient-notes'),
+                    addIngredientBtn: document.getElementById('add-ingredient-btn')
                 };
 
                 this.attachEventListeners();
@@ -542,6 +793,9 @@
                 this.elements.tabButtons.forEach(button => {
                     button.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
                 });
+
+                // Search functionality
+                this.elements.recipeSearch.addEventListener('input', (e) => this.handleSearch(e.target.value));
 
                 // Add recipe button
                 this.elements.addRecipeBtn.addEventListener('click', () => this.showRecipeModal());
@@ -559,6 +813,26 @@
 
                 // Recipe form submission
                 this.elements.recipeForm.addEventListener('submit', (e) => this.handleRecipeSubmit(e));
+
+                // Add ingredient button
+                this.elements.addIngredientBtn.addEventListener('click', () => this.handleAddIngredient());
+
+                // Enter key in ingredient form
+                const ingredientInputs = [
+                    this.elements.ingredientNameInput,
+                    this.elements.ingredientQuantityInput,
+                    this.elements.ingredientUnitSelect,
+                    this.elements.ingredientNotesInput
+                ];
+
+                ingredientInputs.forEach(input => {
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            this.handleAddIngredient();
+                        }
+                    });
+                });
             },
 
             // Switch between tabs
@@ -582,10 +856,28 @@
                 });
             },
 
-            // Show recipe modal
-            showRecipeModal() {
+            // Show recipe modal for adding
+            showRecipeModal(recipeId = null) {
+                this.currentEditingRecipeId = recipeId;
+                this.currentIngredients = [];
+
+                if (recipeId) {
+                    // Edit mode
+                    const recipe = RecipeManager.getRecipeById(recipeId);
+                    if (recipe) {
+                        this.elements.modalTitle.textContent = 'Edit Recipe';
+                        this.elements.recipeNameInput.value = recipe.name;
+                        this.elements.recipeServingsInput.value = recipe.servings;
+                        this.currentIngredients = [...recipe.ingredients];
+                    }
+                } else {
+                    // Add mode
+                    this.elements.modalTitle.textContent = 'Add Recipe';
+                    this.elements.recipeForm.reset();
+                }
+
+                this.renderIngredientList();
                 this.elements.recipeModal.classList.add('active');
-                this.elements.recipeForm.reset();
                 this.elements.recipeNameInput.focus();
             },
 
@@ -593,6 +885,9 @@
             hideRecipeModal() {
                 this.elements.recipeModal.classList.remove('active');
                 this.elements.recipeForm.reset();
+                this.currentEditingRecipeId = null;
+                this.currentIngredients = [];
+                this.clearIngredientForm();
             },
 
             // Handle recipe form submission
@@ -601,20 +896,113 @@
 
                 const recipeData = {
                     name: this.elements.recipeNameInput.value.trim(),
-                    servings: this.elements.recipeServingsInput.value
+                    servings: this.elements.recipeServingsInput.value,
+                    ingredients: this.currentIngredients
                 };
 
                 if (recipeData.name) {
-                    RecipeManager.addRecipe(recipeData);
+                    if (this.currentEditingRecipeId) {
+                        // Update existing recipe
+                        RecipeManager.updateRecipe(this.currentEditingRecipeId, recipeData);
+                    } else {
+                        // Add new recipe
+                        RecipeManager.addRecipe(recipeData);
+                    }
                     this.hideRecipeModal();
                     this.renderRecipeList();
                 }
             },
 
+            // Handle search input
+            handleSearch(query) {
+                const recipes = RecipeManager.searchRecipes(query);
+                this.renderFilteredRecipes(recipes);
+            },
+
+            // Handle add ingredient
+            handleAddIngredient() {
+                const name = this.elements.ingredientNameInput.value.trim();
+                const quantity = parseFloat(this.elements.ingredientQuantityInput.value);
+                const unit = this.elements.ingredientUnitSelect.value;
+                const notes = this.elements.ingredientNotesInput.value.trim();
+
+                if (!name) {
+                    this.elements.ingredientNameInput.focus();
+                    return;
+                }
+
+                const ingredient = {
+                    name,
+                    quantity: quantity || 0,
+                    unit,
+                    notes
+                };
+
+                this.currentIngredients.push(ingredient);
+                this.renderIngredientList();
+                this.clearIngredientForm();
+                this.elements.ingredientNameInput.focus();
+            },
+
+            // Remove ingredient
+            removeIngredient(index) {
+                this.currentIngredients.splice(index, 1);
+                this.renderIngredientList();
+            },
+
+            // Clear ingredient form
+            clearIngredientForm() {
+                this.elements.ingredientNameInput.value = '';
+                this.elements.ingredientQuantityInput.value = '';
+                this.elements.ingredientUnitSelect.value = 'piece';
+                this.elements.ingredientNotesInput.value = '';
+            },
+
+            // Render ingredient list in modal
+            renderIngredientList() {
+                if (this.currentIngredients.length === 0) {
+                    this.elements.ingredientList.innerHTML = `
+                        <div class="empty-ingredient-state">
+                            No ingredients added yet. Add ingredients below.
+                        </div>
+                    `;
+                    return;
+                }
+
+                const html = this.currentIngredients.map((ingredient, index) => {
+                    const quantityText = ingredient.quantity > 0 ? `${ingredient.quantity} ${ingredient.unit}` : ingredient.unit;
+                    const notesText = ingredient.notes ? ` - ${ingredient.notes}` : '';
+
+                    return `
+                        <div class="ingredient-item">
+                            <div class="ingredient-info">
+                                <div class="ingredient-main">${this.escapeHtml(ingredient.name)}</div>
+                                <div class="ingredient-details">${quantityText}${this.escapeHtml(notesText)}</div>
+                            </div>
+                            <button type="button" class="ingredient-delete-btn" data-ingredient-index="${index}">&times;</button>
+                        </div>
+                    `;
+                }).join('');
+
+                this.elements.ingredientList.innerHTML = html;
+
+                // Attach delete event listeners
+                this.currentIngredients.forEach((_, index) => {
+                    const deleteBtn = document.querySelector(`[data-ingredient-index="${index}"]`);
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', () => this.removeIngredient(index));
+                    }
+                });
+            },
+
             // Render the recipe list
             renderRecipeList() {
                 const recipes = RecipeManager.getAllRecipes();
+                this.renderFilteredRecipes(recipes);
+            },
 
+            // Render filtered recipes (used by search)
+            renderFilteredRecipes(recipes) {
                 if (recipes.length === 0) {
                     this.renderEmptyState();
                     return;
@@ -623,8 +1011,13 @@
                 const html = recipes.map(recipe => this.createRecipeCard(recipe)).join('');
                 this.elements.recipeList.innerHTML = html;
 
-                // Attach delete event listeners
+                // Attach event listeners
                 recipes.forEach(recipe => {
+                    const editBtn = document.querySelector(`[data-edit-id="${recipe.id}"]`);
+                    if (editBtn) {
+                        editBtn.addEventListener('click', () => this.showRecipeModal(recipe.id));
+                    }
+
                     const deleteBtn = document.querySelector(`[data-delete-id="${recipe.id}"]`);
                     if (deleteBtn) {
                         deleteBtn.addEventListener('click', () => this.handleDeleteRecipe(recipe.id));
@@ -635,6 +1028,8 @@
             // Create HTML for a recipe card
             createRecipeCard(recipe) {
                 const createdDate = new Date(recipe.createdAt).toLocaleDateString();
+                const ingredientCount = recipe.ingredients ? recipe.ingredients.length : 0;
+                const ingredientText = ingredientCount === 1 ? '1 ingredient' : `${ingredientCount} ingredients`;
 
                 return `
                     <div class="recipe-card">
@@ -642,11 +1037,12 @@
                             <div>
                                 <h3>${this.escapeHtml(recipe.name)}</h3>
                                 <div class="recipe-card-info">
-                                    Servings: ${recipe.servings} | Created: ${createdDate}
+                                    Servings: ${recipe.servings} | ${ingredientText} | Created: ${createdDate}
                                 </div>
                             </div>
                         </div>
                         <div class="recipe-card-actions">
+                            <button class="btn btn-edit" data-edit-id="${recipe.id}">Edit</button>
                             <button class="btn btn-danger" data-delete-id="${recipe.id}">Delete</button>
                         </div>
                     </div>
