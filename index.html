@@ -779,6 +779,240 @@
             background-color: #d35400;
         }
 
+        /* Settings Styles */
+        .settings-container {
+            max-width: 800px;
+        }
+
+        .settings-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+
+        .settings-section h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .settings-section p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .settings-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .storage-usage {
+            margin-top: 1rem;
+        }
+
+        .storage-bar {
+            width: 100%;
+            height: 24px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+            position: relative;
+        }
+
+        .storage-bar-fill {
+            height: 100%;
+            background-color: #3498db;
+            transition: width 0.3s ease, background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .storage-bar-fill.warning {
+            background-color: #e67e22;
+        }
+
+        .storage-bar-fill.danger {
+            background-color: #e74c3c;
+        }
+
+        .storage-text {
+            font-size: 0.9rem;
+            color: #2c3e50;
+            margin-top: 0.5rem;
+        }
+
+        .storage-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .danger-zone {
+            background-color: #fff5f5;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .danger-zone h3 {
+            color: #e74c3c;
+        }
+
+        .keyboard-shortcuts {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .shortcut-key {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 3px;
+            padding: 0.25rem 0.5rem;
+            font-family: monospace;
+            font-weight: 600;
+            min-width: 80px;
+            text-align: center;
+            margin-right: 1rem;
+        }
+
+        .shortcut-description {
+            color: #2c3e50;
+        }
+
+        .about-info {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            line-height: 1.8;
+        }
+
+        .hidden-file-input {
+            display: none;
+        }
+
+        /* Success/Error Messages */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #27ae60;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            display: none;
+        }
+
+        .toast.active {
+            display: block;
+        }
+
+        .toast.error {
+            background-color: #e74c3c;
+        }
+
+        .toast.warning {
+            background-color: #e67e22;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Confirmation Modal */
+        .confirmation-modal .modal-content {
+            max-width: 450px;
+        }
+
+        .confirmation-message {
+            margin: 1.5rem 0;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .confirmation-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #229954;
+        }
+
+        /* Welcome Modal */
+        .welcome-content {
+            text-align: center;
+        }
+
+        .welcome-content h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-content p {
+            color: #7f8c8d;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-steps {
+            text-align: left;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .welcome-steps ol {
+            margin-left: 1.5rem;
+        }
+
+        .welcome-steps li {
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             main {
@@ -876,9 +1110,68 @@
 
             <!-- Settings Tab -->
             <div id="settings-tab" class="tab-content">
-                <div class="placeholder">
-                    <h2>Settings</h2>
-                    <p>App settings coming soon...</p>
+                <div class="settings-container">
+                    <h2 style="margin-bottom: 2rem;">Settings</h2>
+
+                    <!-- Data Management Section -->
+                    <div class="settings-section">
+                        <h3>Data Management</h3>
+                        <p>Export your data as a backup or import data from a previous backup.</p>
+                        <div class="settings-actions">
+                            <button class="btn btn-primary" id="export-data-btn">Export Data</button>
+                            <button class="btn btn-secondary" id="import-data-btn">Import Data</button>
+                            <input type="file" id="import-file-input" class="hidden-file-input" accept=".json">
+                        </div>
+                    </div>
+
+                    <!-- Storage Usage Section -->
+                    <div class="settings-section">
+                        <h3>Storage Usage</h3>
+                        <p>Your data is stored locally in your browser's storage.</p>
+                        <div class="storage-usage">
+                            <div class="storage-bar">
+                                <div class="storage-bar-fill" id="storage-bar-fill"></div>
+                            </div>
+                            <div class="storage-text" id="storage-text"></div>
+                            <div id="storage-warning" style="display: none;" class="storage-warning">
+                                Warning: You are approaching the storage limit. Consider exporting and clearing old data.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Keyboard Shortcuts Section -->
+                    <div class="settings-section">
+                        <h3>Keyboard Shortcuts</h3>
+                        <div class="keyboard-shortcuts">
+                            <div class="shortcut-item">
+                                <div class="shortcut-key">Enter</div>
+                                <div class="shortcut-description">Submit forms / Add ingredient</div>
+                            </div>
+                            <div class="shortcut-item">
+                                <div class="shortcut-key">Escape</div>
+                                <div class="shortcut-description">Close modals</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Section -->
+                    <div class="settings-section">
+                        <h3>About</h3>
+                        <div class="about-info">
+                            <strong>Meal Prep App v1.0</strong><br>
+                            A local-first meal planning application<br>
+                            All your data is stored locally in your browser
+                        </div>
+                    </div>
+
+                    <!-- Danger Zone Section -->
+                    <div class="settings-section">
+                        <div class="danger-zone">
+                            <h3>Danger Zone</h3>
+                            <p>Permanently delete all data. This action cannot be undone.</p>
+                            <button class="btn btn-danger" id="clear-all-data-btn">Clear All Data</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -958,12 +1251,51 @@
         </div>
     </div>
 
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal confirmation-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="confirmation-title">Confirm Action</h2>
+                <button class="close-btn" id="close-confirmation-btn">&times;</button>
+            </div>
+            <div class="confirmation-message" id="confirmation-message"></div>
+            <div class="confirmation-actions">
+                <button class="btn btn-secondary" id="confirmation-cancel-btn">Cancel</button>
+                <button class="btn btn-danger" id="confirmation-confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome Modal -->
+    <div id="welcome-modal" class="modal">
+        <div class="modal-content">
+            <div class="welcome-content">
+                <h2>Welcome to Meal Prep App!</h2>
+                <p>Your personal meal planning companion that keeps everything stored locally in your browser.</p>
+                <div class="welcome-steps">
+                    <ol>
+                        <li>Create recipes with ingredients in the Recipes tab</li>
+                        <li>Plan your week by adding recipes to This Week</li>
+                        <li>Get a consolidated grocery list automatically</li>
+                        <li>Export your data anytime from Settings</li>
+                    </ol>
+                </div>
+                <p>All your data stays on your device - no account required!</p>
+                <button class="btn btn-primary" id="welcome-close-btn">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
     <script>
         // ============================================
         // DATA LAYER - Storage Management
         // ============================================
         const Storage = {
             STORAGE_KEY: 'mealprep_data',
+            WELCOME_SHOWN_KEY: 'mealprep_welcome_shown',
 
             // Initialize default data structure
             getDefaultData() {
@@ -980,6 +1312,10 @@
                     const data = localStorage.getItem(this.STORAGE_KEY);
                     if (data) {
                         const parsed = JSON.parse(data);
+                        // Validate structure
+                        if (!this.validateData(parsed)) {
+                            throw new Error('Invalid data structure');
+                        }
                         // Ensure data has the correct structure
                         return {
                             ...this.getDefaultData(),
@@ -988,6 +1324,7 @@
                     }
                 } catch (error) {
                     console.error('Error loading data:', error);
+                    UI.showToast('Error loading data. Starting with fresh data.', 'error');
                 }
                 return this.getDefaultData();
             },
@@ -995,12 +1332,151 @@
             // Save data to localStorage
             save(data) {
                 try {
+                    // Validate before saving
+                    if (!this.validateData(data)) {
+                        throw new Error('Invalid data structure');
+                    }
                     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
                     return true;
                 } catch (error) {
                     console.error('Error saving data:', error);
+                    if (error.name === 'QuotaExceededError') {
+                        UI.showToast('Storage quota exceeded! Please export and clear some data.', 'error');
+                    } else {
+                        UI.showToast('Error saving data. Please try again.', 'error');
+                    }
                     return false;
                 }
+            },
+
+            // Validate data structure
+            validateData(data) {
+                if (!data || typeof data !== 'object') return false;
+                if (!Array.isArray(data.recipes)) return false;
+                if (!Array.isArray(data.weekPlans)) return false;
+
+                // Validate each recipe
+                for (const recipe of data.recipes) {
+                    if (!recipe.id || !recipe.name || !Array.isArray(recipe.ingredients)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+
+            // Calculate storage usage in bytes
+            getStorageSize() {
+                let total = 0;
+                for (let key in localStorage) {
+                    if (localStorage.hasOwnProperty(key)) {
+                        total += localStorage[key].length + key.length;
+                    }
+                }
+                return total;
+            },
+
+            // Get storage usage for this app only
+            getAppStorageSize() {
+                let total = 0;
+                const data = localStorage.getItem(this.STORAGE_KEY);
+                if (data) {
+                    total += data.length + this.STORAGE_KEY.length;
+                }
+                const checkedState = localStorage.getItem('grocery_checked_state');
+                if (checkedState) {
+                    total += checkedState.length + 'grocery_checked_state'.length;
+                }
+                const welcomeShown = localStorage.getItem(this.WELCOME_SHOWN_KEY);
+                if (welcomeShown) {
+                    total += welcomeShown.length + this.WELCOME_SHOWN_KEY.length;
+                }
+                return total;
+            },
+
+            // Export data as JSON
+            exportData() {
+                try {
+                    const data = this.load();
+                    const exportObj = {
+                        version: 1,
+                        exportedAt: new Date().toISOString(),
+                        data: {
+                            recipes: data.recipes,
+                            weekPlans: data.weekPlans
+                        }
+                    };
+                    return exportObj;
+                } catch (error) {
+                    console.error('Error exporting data:', error);
+                    return null;
+                }
+            },
+
+            // Import data from JSON
+            importData(importedData) {
+                try {
+                    // Validate import structure
+                    if (!importedData || typeof importedData !== 'object') {
+                        throw new Error('Invalid import file format');
+                    }
+                    if (!importedData.version || !importedData.data) {
+                        throw new Error('Invalid import file structure');
+                    }
+                    if (!importedData.data.recipes || !Array.isArray(importedData.data.recipes)) {
+                        throw new Error('Missing or invalid recipes data');
+                    }
+                    if (!importedData.data.weekPlans || !Array.isArray(importedData.data.weekPlans)) {
+                        throw new Error('Missing or invalid week plans data');
+                    }
+
+                    // Validate each recipe has required fields
+                    for (const recipe of importedData.data.recipes) {
+                        if (!recipe.id || !recipe.name || !Array.isArray(recipe.ingredients)) {
+                            throw new Error('Invalid recipe data in import file');
+                        }
+                    }
+
+                    // Create new data object
+                    const newData = {
+                        version: 1,
+                        recipes: importedData.data.recipes,
+                        weekPlans: importedData.data.weekPlans
+                    };
+
+                    // Save the imported data
+                    const success = this.save(newData);
+                    if (success) {
+                        return { success: true, data: newData };
+                    } else {
+                        throw new Error('Failed to save imported data');
+                    }
+                } catch (error) {
+                    console.error('Error importing data:', error);
+                    return { success: false, error: error.message };
+                }
+            },
+
+            // Clear all data
+            clearAllData() {
+                try {
+                    localStorage.removeItem(this.STORAGE_KEY);
+                    localStorage.removeItem('grocery_checked_state');
+                    return true;
+                } catch (error) {
+                    console.error('Error clearing data:', error);
+                    return false;
+                }
+            },
+
+            // Check if welcome has been shown
+            isWelcomeShown() {
+                return localStorage.getItem(this.WELCOME_SHOWN_KEY) === 'true';
+            },
+
+            // Mark welcome as shown
+            markWelcomeShown() {
+                localStorage.setItem(this.WELCOME_SHOWN_KEY, 'true');
             }
         };
 
@@ -1025,37 +1501,85 @@
                 return this.data.recipes.find(recipe => recipe.id === id);
             },
 
+            // Validate recipe data
+            validateRecipeData(recipeData) {
+                if (!recipeData.name || recipeData.name.trim() === '') {
+                    throw new Error('Recipe name is required');
+                }
+                if (!recipeData.servings || recipeData.servings < 1) {
+                    throw new Error('Servings must be at least 1');
+                }
+                if (!Array.isArray(recipeData.ingredients)) {
+                    throw new Error('Invalid ingredients data');
+                }
+                return true;
+            },
+
             // Add a new recipe
             addRecipe(recipeData) {
-                const recipe = {
-                    id: crypto.randomUUID(),
-                    name: recipeData.name,
-                    servings: parseInt(recipeData.servings) || 1,
-                    ingredients: recipeData.ingredients || [],
-                    tags: [],
-                    prepTime: null,
-                    notes: "",
-                    createdAt: Date.now(),
-                    updatedAt: Date.now()
-                };
+                try {
+                    this.validateRecipeData(recipeData);
 
-                this.data.recipes.push(recipe);
-                this.autoSave();
-                return recipe;
+                    const recipe = {
+                        id: crypto.randomUUID(),
+                        name: recipeData.name.trim(),
+                        servings: parseInt(recipeData.servings) || 1,
+                        ingredients: recipeData.ingredients || [],
+                        tags: [],
+                        prepTime: null,
+                        notes: "",
+                        createdAt: Date.now(),
+                        updatedAt: Date.now()
+                    };
+
+                    this.data.recipes.push(recipe);
+                    const saved = this.autoSave();
+                    if (!saved) {
+                        // Rollback
+                        this.data.recipes.pop();
+                        throw new Error('Failed to save recipe');
+                    }
+                    return recipe;
+                } catch (error) {
+                    console.error('Error adding recipe:', error);
+                    UI.showToast(error.message || 'Failed to add recipe', 'error');
+                    return null;
+                }
             },
 
             // Update an existing recipe
             updateRecipe(id, recipeData) {
-                const recipe = this.getRecipeById(id);
-                if (recipe) {
-                    recipe.name = recipeData.name;
-                    recipe.servings = parseInt(recipeData.servings) || 1;
-                    recipe.ingredients = recipeData.ingredients || [];
-                    recipe.updatedAt = Date.now();
-                    this.autoSave();
-                    return recipe;
+                try {
+                    this.validateRecipeData(recipeData);
+
+                    const recipe = this.getRecipeById(id);
+                    if (recipe) {
+                        // Store old values for rollback
+                        const oldName = recipe.name;
+                        const oldServings = recipe.servings;
+                        const oldIngredients = recipe.ingredients;
+
+                        recipe.name = recipeData.name.trim();
+                        recipe.servings = parseInt(recipeData.servings) || 1;
+                        recipe.ingredients = recipeData.ingredients || [];
+                        recipe.updatedAt = Date.now();
+
+                        const saved = this.autoSave();
+                        if (!saved) {
+                            // Rollback
+                            recipe.name = oldName;
+                            recipe.servings = oldServings;
+                            recipe.ingredients = oldIngredients;
+                            throw new Error('Failed to save recipe');
+                        }
+                        return recipe;
+                    }
+                    return null;
+                } catch (error) {
+                    console.error('Error updating recipe:', error);
+                    UI.showToast(error.message || 'Failed to update recipe', 'error');
+                    return null;
                 }
-                return null;
             },
 
             // Delete a recipe
@@ -1613,6 +2137,42 @@
                 // Grocery list event listeners
                 this.elements.uncheckAllBtn.addEventListener('click', () => this.handleUncheckAll());
                 this.elements.copyListBtn.addEventListener('click', () => this.handleCopyToClipboard());
+
+                // Settings event listeners
+                const exportBtn = document.getElementById('export-data-btn');
+                const importBtn = document.getElementById('import-data-btn');
+                const importFileInput = document.getElementById('import-file-input');
+                const clearAllBtn = document.getElementById('clear-all-data-btn');
+
+                if (exportBtn) exportBtn.addEventListener('click', () => this.handleExportData());
+                if (importBtn) importBtn.addEventListener('click', () => importFileInput.click());
+                if (importFileInput) importFileInput.addEventListener('change', (e) => this.handleImportFile(e));
+                if (clearAllBtn) clearAllBtn.addEventListener('click', () => this.handleClearAllData());
+
+                // Escape key handler for all modals
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.hideRecipeModal();
+                        this.hideRecipePicker();
+                        this.hideConfirmationModal();
+                    }
+                });
+
+                // Welcome modal close button
+                const welcomeCloseBtn = document.getElementById('welcome-close-btn');
+                if (welcomeCloseBtn) {
+                    welcomeCloseBtn.addEventListener('click', () => this.hideWelcomeModal());
+                }
+
+                // Confirmation modal buttons
+                const confirmationCancelBtn = document.getElementById('confirmation-cancel-btn');
+                const confirmationCloseBtn = document.getElementById('close-confirmation-btn');
+                if (confirmationCancelBtn) {
+                    confirmationCancelBtn.addEventListener('click', () => this.hideConfirmationModal());
+                }
+                if (confirmationCloseBtn) {
+                    confirmationCloseBtn.addEventListener('click', () => this.hideConfirmationModal());
+                }
             },
 
             // Switch between tabs
@@ -1643,6 +2203,11 @@
                 // Render grocery list when grocery tab is activated
                 if (tabName === 'grocery') {
                     this.renderGroceryList();
+                }
+
+                // Render storage usage when settings tab is activated
+                if (tabName === 'settings') {
+                    this.renderStorageUsage();
                 }
             },
 
@@ -1691,15 +2256,25 @@
                 };
 
                 if (recipeData.name) {
+                    let result;
                     if (this.currentEditingRecipeId) {
                         // Update existing recipe
-                        RecipeManager.updateRecipe(this.currentEditingRecipeId, recipeData);
+                        result = RecipeManager.updateRecipe(this.currentEditingRecipeId, recipeData);
+                        if (result) {
+                            this.showToast('Recipe updated successfully!', 'success');
+                        }
                     } else {
                         // Add new recipe
-                        RecipeManager.addRecipe(recipeData);
+                        result = RecipeManager.addRecipe(recipeData);
+                        if (result) {
+                            this.showToast('Recipe added successfully!', 'success');
+                        }
                     }
-                    this.hideRecipeModal();
-                    this.renderRecipeList();
+
+                    if (result) {
+                        this.hideRecipeModal();
+                        this.renderRecipeList();
+                    }
                 }
             },
 
@@ -1859,7 +2434,10 @@
             handleDeleteRecipe(id) {
                 const recipe = RecipeManager.getRecipeById(id);
                 if (recipe && confirm(`Are you sure you want to delete "${recipe.name}"?`)) {
-                    RecipeManager.deleteRecipe(id);
+                    const success = RecipeManager.deleteRecipe(id);
+                    if (success) {
+                        this.showToast('Recipe deleted', 'success');
+                    }
                     this.renderRecipeList();
                 }
             },
@@ -2029,6 +2607,9 @@
                 if (success) {
                     this.hideRecipePicker();
                     this.renderWeekPlan();
+                    this.showToast('Recipe added to week plan', 'success');
+                } else {
+                    this.showToast('Recipe is already in your week plan', 'warning');
                 }
             },
 
@@ -2051,6 +2632,7 @@
                 if (confirm('Clear all recipes from this week?')) {
                     WeekPlanManager.clearWeek();
                     this.renderWeekPlan();
+                    this.showToast('Week plan cleared', 'success');
                 }
             },
 
@@ -2191,6 +2773,233 @@
                 const div = document.createElement('div');
                 div.textContent = text;
                 return div.innerHTML;
+            },
+
+            // ============================================
+            // Settings UI Methods
+            // ============================================
+
+            // Render storage usage
+            renderStorageUsage() {
+                const sizeBytes = Storage.getAppStorageSize();
+                const sizeKB = (sizeBytes / 1024).toFixed(2);
+                const sizeMB = (sizeBytes / (1024 * 1024)).toFixed(2);
+                const maxMB = 5;
+                const percentUsed = (sizeBytes / (maxMB * 1024 * 1024)) * 100;
+
+                const storageBarFill = document.getElementById('storage-bar-fill');
+                const storageText = document.getElementById('storage-text');
+                const storageWarning = document.getElementById('storage-warning');
+
+                if (storageBarFill) {
+                    storageBarFill.style.width = Math.min(percentUsed, 100) + '%';
+                    storageBarFill.textContent = percentUsed.toFixed(1) + '%';
+
+                    // Change color based on usage
+                    storageBarFill.classList.remove('warning', 'danger');
+                    if (percentUsed >= 90) {
+                        storageBarFill.classList.add('danger');
+                    } else if (percentUsed >= 80) {
+                        storageBarFill.classList.add('warning');
+                    }
+                }
+
+                if (storageText) {
+                    const displaySize = sizeKB > 1024 ? `${sizeMB} MB` : `${sizeKB} KB`;
+                    storageText.textContent = `Using ${displaySize} of ~${maxMB} MB available`;
+                }
+
+                // Show warning if approaching limit (4MB = 80%)
+                if (storageWarning) {
+                    if (sizeBytes >= 4 * 1024 * 1024) {
+                        storageWarning.style.display = 'block';
+                    } else {
+                        storageWarning.style.display = 'none';
+                    }
+                }
+            },
+
+            // Handle export data
+            handleExportData() {
+                try {
+                    const exportData = Storage.exportData();
+                    if (!exportData) {
+                        throw new Error('Failed to prepare export data');
+                    }
+
+                    const jsonString = JSON.stringify(exportData, null, 2);
+                    const blob = new Blob([jsonString], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+
+                    const today = new Date().toISOString().split('T')[0];
+                    const filename = `mealprep-backup-${today}.json`;
+
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    this.showToast('Data exported successfully!', 'success');
+                } catch (error) {
+                    console.error('Export error:', error);
+                    this.showToast('Failed to export data', 'error');
+                }
+            },
+
+            // Handle import file selection
+            handleImportFile(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        this.showImportConfirmation(importedData);
+                    } catch (error) {
+                        console.error('Import parse error:', error);
+                        this.showToast('Invalid JSON file. Please check the file format.', 'error');
+                    }
+                    // Reset file input
+                    event.target.value = '';
+                };
+                reader.onerror = () => {
+                    this.showToast('Failed to read file', 'error');
+                    event.target.value = '';
+                };
+                reader.readAsText(file);
+            },
+
+            // Show import confirmation dialog
+            showImportConfirmation(importedData) {
+                const recipeCount = importedData?.data?.recipes?.length || 0;
+                const weekPlanCount = importedData?.data?.weekPlans?.length || 0;
+
+                this.showConfirmation(
+                    'Import Data',
+                    `This will replace all your current data with the imported data.\n\nImport contains:\n- ${recipeCount} recipes\n- ${weekPlanCount} week plans\n\nThis action cannot be undone. Continue?`,
+                    () => this.performImport(importedData),
+                    'Import'
+                );
+            },
+
+            // Perform the actual import
+            performImport(importedData) {
+                const result = Storage.importData(importedData);
+
+                if (result.success) {
+                    // Reload all managers with new data
+                    RecipeManager.data = result.data;
+                    WeekPlanManager.data = result.data;
+                    GroceryListManager.init();
+
+                    // Refresh all UI
+                    this.renderRecipeList();
+                    this.renderWeekPlan();
+                    this.renderGroceryList();
+                    this.renderStorageUsage();
+
+                    this.showToast('Data imported successfully!', 'success');
+                } else {
+                    this.showToast(`Import failed: ${result.error}`, 'error');
+                }
+            },
+
+            // Handle clear all data
+            handleClearAllData() {
+                this.showConfirmation(
+                    'Clear All Data',
+                    'This will permanently delete ALL your recipes, meal plans, and grocery lists.\n\nThis action CANNOT be undone!\n\nAre you absolutely sure?',
+                    () => this.performClearAllData(),
+                    'Delete Everything'
+                );
+            },
+
+            // Perform the actual clear
+            performClearAllData() {
+                const success = Storage.clearAllData();
+
+                if (success) {
+                    // Reload all managers with fresh data
+                    RecipeManager.init();
+                    WeekPlanManager.init();
+                    GroceryListManager.init();
+
+                    // Refresh all UI
+                    this.renderRecipeList();
+                    this.renderWeekPlan();
+                    this.renderGroceryList();
+                    this.renderStorageUsage();
+
+                    this.showToast('All data cleared', 'success');
+                } else {
+                    this.showToast('Failed to clear data', 'error');
+                }
+            },
+
+            // Show confirmation modal
+            showConfirmation(title, message, onConfirm, confirmText = 'Confirm') {
+                const modal = document.getElementById('confirmation-modal');
+                const titleEl = document.getElementById('confirmation-title');
+                const messageEl = document.getElementById('confirmation-message');
+                const confirmBtn = document.getElementById('confirmation-confirm-btn');
+
+                if (titleEl) titleEl.textContent = title;
+                if (messageEl) messageEl.textContent = message;
+                if (confirmBtn) confirmBtn.textContent = confirmText;
+
+                // Remove old listeners and add new one
+                const newConfirmBtn = confirmBtn.cloneNode(true);
+                confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+                newConfirmBtn.addEventListener('click', () => {
+                    this.hideConfirmationModal();
+                    onConfirm();
+                });
+
+                modal.classList.add('active');
+            },
+
+            // Hide confirmation modal
+            hideConfirmationModal() {
+                const modal = document.getElementById('confirmation-modal');
+                modal.classList.remove('active');
+            },
+
+            // Show welcome modal
+            showWelcomeModal() {
+                const modal = document.getElementById('welcome-modal');
+                modal.classList.add('active');
+            },
+
+            // Hide welcome modal
+            hideWelcomeModal() {
+                const modal = document.getElementById('welcome-modal');
+                modal.classList.remove('active');
+                Storage.markWelcomeShown();
+            },
+
+            // Show toast notification
+            showToast(message, type = 'success') {
+                const toast = document.getElementById('toast');
+                if (!toast) return;
+
+                toast.textContent = message;
+                toast.className = 'toast active';
+
+                if (type === 'error') {
+                    toast.classList.add('error');
+                } else if (type === 'warning') {
+                    toast.classList.add('warning');
+                }
+
+                // Auto-hide after 3 seconds
+                setTimeout(() => {
+                    toast.classList.remove('active');
+                }, 3000);
             }
         };
 
@@ -2208,6 +3017,14 @@
 
             // Render initial recipe list
             UI.renderRecipeList();
+
+            // Show welcome modal for first-time users
+            if (!Storage.isWelcomeShown()) {
+                // Small delay to ensure page is fully loaded
+                setTimeout(() => {
+                    UI.showWelcomeModal();
+                }, 500);
+            }
         });
     </script>
 </body>
