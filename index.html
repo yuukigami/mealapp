@@ -481,6 +481,163 @@
             border-color: #3498db;
         }
 
+        /* Week Plan Styles */
+        .week-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .week-header h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .week-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .week-info {
+            background-color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #2c3e50;
+        }
+
+        .meal-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .meal-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .meal-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .meal-info {
+            flex: 1;
+        }
+
+        .meal-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .meal-details {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .meal-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .servings-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .servings-control label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .servings-control input {
+            width: 60px;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .servings-control input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .btn-remove {
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-remove:hover {
+            background-color: #c0392b;
+        }
+
+        /* Recipe Picker Modal */
+        .picker-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+
+        .picker-item {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .picker-item:hover {
+            background-color: #f9f9f9;
+            border-color: #3498db;
+        }
+
+        .picker-item-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .picker-item-info {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .picker-empty {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+        }
+
+        .btn-clear {
+            background-color: #e67e22;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background-color: #d35400;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             main {
@@ -540,10 +697,15 @@
 
             <!-- This Week Tab -->
             <div id="week-tab" class="tab-content">
-                <div class="placeholder">
+                <div class="week-header">
                     <h2>This Week</h2>
-                    <p>Weekly meal planning coming soon...</p>
+                    <div class="week-actions">
+                        <button class="btn btn-primary" id="add-meal-btn">Add Recipe</button>
+                        <button class="btn btn-clear" id="clear-week-btn">Clear Week</button>
+                    </div>
                 </div>
+                <div class="week-info" id="week-info"></div>
+                <div id="meal-list" class="meal-list"></div>
             </div>
 
             <!-- Grocery List Tab -->
@@ -621,6 +783,20 @@
                     <button type="submit" class="btn btn-primary">Save Recipe</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Recipe Picker Modal -->
+    <div id="picker-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Recipe to Week</h2>
+                <button class="close-btn" id="close-picker-btn">&times;</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="picker-search" placeholder="Search recipes...">
+            </div>
+            <div id="picker-list" class="picker-list"></div>
         </div>
     </div>
 
@@ -753,6 +929,121 @@
         };
 
         // ============================================
+        // BUSINESS LOGIC - Week Plan Management
+        // ============================================
+        const WeekPlanManager = {
+            data: null,
+
+            // Initialize the manager
+            init() {
+                this.data = Storage.load();
+                this.ensureCurrentWeekPlan();
+            },
+
+            // Get current week start (Monday)
+            getCurrentWeekStart() {
+                const now = new Date();
+                const day = now.getDay();
+                const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Monday
+                const monday = new Date(now.setDate(diff));
+                return monday.toISOString().split('T')[0];
+            },
+
+            // Ensure a week plan exists for the current week
+            ensureCurrentWeekPlan() {
+                const weekStart = this.getCurrentWeekStart();
+                let weekPlan = this.data.weekPlans.find(plan => plan.weekStart === weekStart);
+
+                if (!weekPlan) {
+                    weekPlan = {
+                        id: crypto.randomUUID(),
+                        weekStart: weekStart,
+                        meals: []
+                    };
+                    this.data.weekPlans.push(weekPlan);
+                    this.autoSave();
+                }
+
+                return weekPlan;
+            },
+
+            // Get current week plan
+            getCurrentWeekPlan() {
+                const weekStart = this.getCurrentWeekStart();
+                return this.data.weekPlans.find(plan => plan.weekStart === weekStart) || this.ensureCurrentWeekPlan();
+            },
+
+            // Add a recipe to the current week
+            addRecipeToWeek(recipeId, servings = 1) {
+                const weekPlan = this.getCurrentWeekPlan();
+
+                // Check if recipe already exists in the week
+                const existingMeal = weekPlan.meals.find(meal => meal.recipeId === recipeId);
+                if (existingMeal) {
+                    return false; // Recipe already in week
+                }
+
+                weekPlan.meals.push({
+                    recipeId: recipeId,
+                    servings: servings
+                });
+
+                this.autoSave();
+                return true;
+            },
+
+            // Remove a recipe from the current week
+            removeRecipeFromWeek(recipeId) {
+                const weekPlan = this.getCurrentWeekPlan();
+                const index = weekPlan.meals.findIndex(meal => meal.recipeId === recipeId);
+
+                if (index !== -1) {
+                    weekPlan.meals.splice(index, 1);
+                    this.autoSave();
+                    return true;
+                }
+                return false;
+            },
+
+            // Update servings for a recipe in the week
+            updateServings(recipeId, servings) {
+                const weekPlan = this.getCurrentWeekPlan();
+                const meal = weekPlan.meals.find(meal => meal.recipeId === recipeId);
+
+                if (meal) {
+                    meal.servings = Math.max(1, parseInt(servings) || 1);
+                    this.autoSave();
+                    return true;
+                }
+                return false;
+            },
+
+            // Clear all recipes from the current week
+            clearWeek() {
+                const weekPlan = this.getCurrentWeekPlan();
+                weekPlan.meals = [];
+                this.autoSave();
+            },
+
+            // Get all meals for the current week with recipe details
+            getCurrentWeekMeals() {
+                const weekPlan = this.getCurrentWeekPlan();
+                return weekPlan.meals.map(meal => {
+                    const recipe = RecipeManager.getRecipeById(meal.recipeId);
+                    return {
+                        ...meal,
+                        recipe: recipe
+                    };
+                }).filter(meal => meal.recipe); // Filter out any deleted recipes
+            },
+
+            // Auto-save to localStorage
+            autoSave() {
+                Storage.save(this.data);
+            }
+        };
+
+        // ============================================
         // UI LAYER - User Interface Management
         // ============================================
         const UI = {
@@ -781,7 +1072,16 @@
                     ingredientQuantityInput: document.getElementById('ingredient-quantity'),
                     ingredientUnitSelect: document.getElementById('ingredient-unit'),
                     ingredientNotesInput: document.getElementById('ingredient-notes'),
-                    addIngredientBtn: document.getElementById('add-ingredient-btn')
+                    addIngredientBtn: document.getElementById('add-ingredient-btn'),
+                    // Week plan elements
+                    weekInfo: document.getElementById('week-info'),
+                    mealList: document.getElementById('meal-list'),
+                    addMealBtn: document.getElementById('add-meal-btn'),
+                    clearWeekBtn: document.getElementById('clear-week-btn'),
+                    pickerModal: document.getElementById('picker-modal'),
+                    pickerSearch: document.getElementById('picker-search'),
+                    pickerList: document.getElementById('picker-list'),
+                    closePickerBtn: document.getElementById('close-picker-btn')
                 };
 
                 this.attachEventListeners();
@@ -833,6 +1133,19 @@
                         }
                     });
                 });
+
+                // Week plan event listeners
+                this.elements.addMealBtn.addEventListener('click', () => this.showRecipePicker());
+                this.elements.clearWeekBtn.addEventListener('click', () => this.handleClearWeek());
+                this.elements.closePickerBtn.addEventListener('click', () => this.hideRecipePicker());
+                this.elements.pickerSearch.addEventListener('input', (e) => this.handlePickerSearch(e.target.value));
+
+                // Close picker modal on outside click
+                this.elements.pickerModal.addEventListener('click', (e) => {
+                    if (e.target === this.elements.pickerModal) {
+                        this.hideRecipePicker();
+                    }
+                });
             },
 
             // Switch between tabs
@@ -854,6 +1167,11 @@
                         content.classList.remove('active');
                     }
                 });
+
+                // Render week plan when week tab is activated
+                if (tabName === 'week') {
+                    this.renderWeekPlan();
+                }
             },
 
             // Show recipe modal for adding
@@ -1074,6 +1392,196 @@
                 }
             },
 
+            // ============================================
+            // Week Plan UI Methods
+            // ============================================
+
+            // Render the week plan
+            renderWeekPlan() {
+                const meals = WeekPlanManager.getCurrentWeekMeals();
+                const weekStart = WeekPlanManager.getCurrentWeekStart();
+
+                // Render week info
+                const weekDate = new Date(weekStart);
+                const weekEnd = new Date(weekDate);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+
+                const formatDate = (date) => {
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                };
+
+                const mealCount = meals.length;
+                const mealText = mealCount === 1 ? '1 recipe' : `${mealCount} recipes`;
+
+                this.elements.weekInfo.innerHTML = `
+                    <strong>Week of ${formatDate(weekDate)} - ${formatDate(weekEnd)}</strong> | ${mealText} planned
+                `;
+
+                // Render meal list
+                if (meals.length === 0) {
+                    this.renderEmptyWeekState();
+                    return;
+                }
+
+                const html = meals.map(meal => this.createMealItem(meal)).join('');
+                this.elements.mealList.innerHTML = html;
+
+                // Attach event listeners
+                meals.forEach(meal => {
+                    // Remove button
+                    const removeBtn = document.querySelector(`[data-remove-meal="${meal.recipeId}"]`);
+                    if (removeBtn) {
+                        removeBtn.addEventListener('click', () => this.handleRemoveMeal(meal.recipeId));
+                    }
+
+                    // Servings input
+                    const servingsInput = document.querySelector(`[data-servings-input="${meal.recipeId}"]`);
+                    if (servingsInput) {
+                        servingsInput.addEventListener('change', (e) => {
+                            this.handleUpdateServings(meal.recipeId, e.target.value);
+                        });
+                    }
+                });
+            },
+
+            // Create HTML for a meal item
+            createMealItem(meal) {
+                const recipe = meal.recipe;
+                const ingredientCount = recipe.ingredients ? recipe.ingredients.length : 0;
+                const ingredientText = ingredientCount === 1 ? '1 ingredient' : `${ingredientCount} ingredients`;
+
+                return `
+                    <div class="meal-item">
+                        <div class="meal-info">
+                            <div class="meal-name">${this.escapeHtml(recipe.name)}</div>
+                            <div class="meal-details">${ingredientText}</div>
+                        </div>
+                        <div class="meal-controls">
+                            <div class="servings-control">
+                                <label>Servings:</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value="${meal.servings}"
+                                    data-servings-input="${meal.recipeId}"
+                                >
+                            </div>
+                            <button class="btn btn-remove" data-remove-meal="${meal.recipeId}">Remove</button>
+                        </div>
+                    </div>
+                `;
+            },
+
+            // Render empty week state
+            renderEmptyWeekState() {
+                this.elements.mealList.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        <h3>No Recipes Planned</h3>
+                        <p>Start planning your week by adding recipes from your library.</p>
+                        <button class="btn btn-primary" onclick="UI.showRecipePicker()">Add First Recipe</button>
+                    </div>
+                `;
+            },
+
+            // Show recipe picker modal
+            showRecipePicker() {
+                this.elements.pickerModal.classList.add('active');
+                this.elements.pickerSearch.value = '';
+                this.renderRecipePicker(RecipeManager.getAllRecipes());
+                this.elements.pickerSearch.focus();
+            },
+
+            // Hide recipe picker modal
+            hideRecipePicker() {
+                this.elements.pickerModal.classList.remove('active');
+                this.elements.pickerSearch.value = '';
+            },
+
+            // Handle picker search
+            handlePickerSearch(query) {
+                const recipes = RecipeManager.searchRecipes(query);
+                this.renderRecipePicker(recipes);
+            },
+
+            // Render recipe picker list
+            renderRecipePicker(recipes) {
+                if (recipes.length === 0) {
+                    this.elements.pickerList.innerHTML = `
+                        <div class="picker-empty">
+                            No recipes found. ${this.elements.pickerSearch.value ? 'Try a different search.' : 'Create a recipe first.'}
+                        </div>
+                    `;
+                    return;
+                }
+
+                const currentMealRecipeIds = WeekPlanManager.getCurrentWeekMeals().map(m => m.recipeId);
+
+                const html = recipes.map(recipe => {
+                    const ingredientCount = recipe.ingredients ? recipe.ingredients.length : 0;
+                    const ingredientText = ingredientCount === 1 ? '1 ingredient' : `${ingredientCount} ingredients`;
+                    const alreadyAdded = currentMealRecipeIds.includes(recipe.id);
+
+                    return `
+                        <div class="picker-item ${alreadyAdded ? 'disabled' : ''}"
+                             data-picker-recipe="${recipe.id}"
+                             style="${alreadyAdded ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                            <div class="picker-item-name">
+                                ${this.escapeHtml(recipe.name)}
+                                ${alreadyAdded ? '(Already added)' : ''}
+                            </div>
+                            <div class="picker-item-info">${ingredientText} | ${recipe.servings} servings</div>
+                        </div>
+                    `;
+                }).join('');
+
+                this.elements.pickerList.innerHTML = html;
+
+                // Attach click listeners
+                recipes.forEach(recipe => {
+                    const pickerItem = document.querySelector(`[data-picker-recipe="${recipe.id}"]`);
+                    if (pickerItem && !pickerItem.classList.contains('disabled')) {
+                        pickerItem.addEventListener('click', () => this.handleAddRecipeToWeek(recipe.id, recipe.servings));
+                    }
+                });
+            },
+
+            // Handle adding a recipe to the week
+            handleAddRecipeToWeek(recipeId, servings) {
+                const success = WeekPlanManager.addRecipeToWeek(recipeId, servings);
+                if (success) {
+                    this.hideRecipePicker();
+                    this.renderWeekPlan();
+                }
+            },
+
+            // Handle removing a meal from the week
+            handleRemoveMeal(recipeId) {
+                if (confirm('Remove this recipe from the week plan?')) {
+                    WeekPlanManager.removeRecipeFromWeek(recipeId);
+                    this.renderWeekPlan();
+                }
+            },
+
+            // Handle updating servings
+            handleUpdateServings(recipeId, servings) {
+                WeekPlanManager.updateServings(recipeId, servings);
+                this.renderWeekPlan();
+            },
+
+            // Handle clearing the entire week
+            handleClearWeek() {
+                if (confirm('Clear all recipes from this week?')) {
+                    WeekPlanManager.clearWeek();
+                    this.renderWeekPlan();
+                }
+            },
+
             // Escape HTML to prevent XSS
             escapeHtml(text) {
                 const div = document.createElement('div');
@@ -1088,6 +1596,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize data layer
             RecipeManager.init();
+            WeekPlanManager.init();
 
             // Initialize UI layer
             UI.init();
